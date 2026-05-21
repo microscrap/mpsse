@@ -1,5 +1,7 @@
 # microscrap/mpsse - MPSSE helper + static API for ScrapyardIO
 
+[![Coverage](https://img.shields.io/badge/coverage-75.0%25-yellow)](#testing-pest-v4)
+
 PHP library that provides MPSSE-oriented SPI/I2C/GPIO operations on top of [`microscrap/ftdi`](https://github.com/microscrap/ftdi) and the [`ext-ftdi`](https://github.com/php-io-extensions/ftdi) extension.
 
 This package includes:
@@ -180,6 +182,42 @@ This package ships typed enums in `Microscrap\Bindings\MPSSE\Enums`:
 * `MPSSEPin`
 * `MPSSEGpioPin`
 * `MpsseSupportedDevice`
+
+---
+
+## Testing (Pest v4)
+
+Run the feature suite:
+
+```bash
+./vendor/bin/pest
+```
+
+Run with coverage:
+
+```bash
+XDEBUG_MODE=coverage ./vendor/bin/pest --coverage
+```
+
+Implemented feature coverage includes:
+
+* `ext-ftdi` installation check (`extension_loaded('ftdi')` + semantic version format check)
+* No-hardware fallback paths: invalid VID/PID open failure and closed-context guard behavior
+* FT232H hardware workflows (open -> configure -> start -> transfer -> stop -> close)
+* SPI loopback, GPIO pin control, bitbang, and I2C session/ACK flows in required call order
+* Wrong-workflow assertions on mode mismatches (SPI transfer in I2C session, bitbang controls in SPI session)
+* Helper workflow path: `mpsse_open(...)` / `mpsse_close(...)` on real hardware
+* Latest measured total line coverage with FT232H attached: `75.0%`
+
+## Code Completion Scan Results
+
+Source scan summary (from current code):
+
+* `src/MPSSE.php`: `41` public static methods
+* `src/Helpers/mpsse.php`: `2` global helper functions
+* `src/Enums`: `9` enum types
+
+README API sections are aligned to the current scanned symbols.
 
 ## License
 

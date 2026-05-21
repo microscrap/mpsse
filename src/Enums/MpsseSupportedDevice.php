@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Microscrap\Bindings\MPSSE\Enums;
 
-use Fabrication\CWrappers\FTDI\Enums\FtdiProductId;
-use Fabrication\CWrappers\FTDI\Enums\FtdiVendorId;
+use Microscrap\Bindings\FTDI\Enums\FtdiProductId;
+use Microscrap\Bindings\FTDI\Enums\FtdiVendorId;
 
 /**
- * USB devices supported by libmpsse ({@see \ScrapyardIO\Libraries\MPSSE\MPSSE::openSupported()}).
+ * USB devices supported by libmpsse ({@see \Microscrap\Bindings\MPSSE\MPSSE::openSupported()}).
  */
 enum MpsseSupportedDevice
 {
@@ -98,7 +98,7 @@ enum MpsseSupportedDevice
         };
     }
 
-    /** GPIO lines exposed in {@see \ScrapyardIO\Libraries\MPSSE\Enums\MPSSEMode::GPIO} (GPIOL + GPIOH). */
+    /** GPIO lines exposed in {@see MPSSEMode::GPIO} (GPIOL + GPIOH). */
     public function gpioLineCount(): int
     {
         return 12;
