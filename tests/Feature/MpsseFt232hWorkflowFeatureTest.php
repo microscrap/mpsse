@@ -11,6 +11,7 @@ use Microscrap\Bindings\MPSSE\Enums\MPSSEMode;
 use Microscrap\Bindings\MPSSE\Enums\MpsseSupportedDevice;
 use Microscrap\Bindings\MPSSE\MPSSE;
 use Microscrap\Bindings\MPSSE\MPSSEContext;
+use PHPUnit\Framework\SkippedWithMessageException;
 
 it('opens an FT232H through the supported-device workflow and reads session metadata', function (): void {
     MpsseHardware::withFt232h(function (MPSSEContext $context): void {
@@ -31,7 +32,7 @@ it('finds the FT232H through openSupported after scanning supported devices', fu
     );
 
     if ($context === null) {
-        throw new \PHPUnit\Framework\SkippedWithMessageException('No supported MPSSE device detected');
+        throw new SkippedWithMessageException('No supported MPSSE device detected');
     }
 
     try {
@@ -53,7 +54,7 @@ it('supports helper open and close workflow on real hardware', function (): void
     );
 
     if ($context === null) {
-        throw new \PHPUnit\Framework\SkippedWithMessageException('FT232H not detected through helper open');
+        throw new SkippedWithMessageException('FT232H not detected through helper open');
     }
 
     mpsse_close($context);

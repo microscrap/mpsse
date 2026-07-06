@@ -3,7 +3,7 @@
     "description": "The MPSSE package that extends the FTDI Package",
     "license": "MIT",
     "homepage": "https://scrapyard-io.projectsaturnstudios.com",
-    "version": "0.4.2",
+    "version": "0.5.0",
     "authors": [
         {
             "name": "Angel Gonzalez",
@@ -13,7 +13,7 @@
     "require": {
         "php": "^8.3",
         "ext-ftdi": "^0.4.0",
-        "microscrap/ftdi": "^0.4.0"
+        "microscrap/ftdi": "^0.5.0"
     },
     "require-dev": {
         "pestphp/pest": "^4"

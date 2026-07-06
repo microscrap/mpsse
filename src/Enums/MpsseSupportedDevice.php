@@ -6,40 +6,21 @@ namespace Microscrap\Bindings\MPSSE\Enums;
 
 use Microscrap\Bindings\FTDI\Enums\FtdiProductId;
 use Microscrap\Bindings\FTDI\Enums\FtdiVendorId;
+use Microscrap\Bindings\MPSSE\MPSSE;
 
 /**
- * USB devices supported by libmpsse ({@see \Microscrap\Bindings\MPSSE\MPSSE::openSupported()}).
+ * USB devices supported by libmpsse ({@see MPSSE::openSupported()}).
  */
-enum MpsseSupportedDevice
+enum MpsseSupportedDevice: string
 {
-    case FT2232;
+    case FT2232HL_A = 'ft2232hl-a';
+    case FT2232HL_B = 'ft2232hl-b';
 
-    case FT4232;
-
-    case FT232H;
-
-    case BusBlasterV2ChannelA;
-
-    case BusBlasterV2ChannelB;
-
-    case TurtelizerJtagRs232AdapterA;
-
-    case AmontecJtagKey;
-
-    case TiaoMultiProtocolAdapter;
-
-    case OlimexOpenOcdJtag;
-
-    case OlimexOpenOcdJtagTiny;
-
-    /** USB vendor ID (Olimex adapters use a non-FTDI VID). */
-    private const OLIMEX_VENDOR_ID = 0x15BA;
+    case FT232H = 'ft232h';
 
     public function vendorId(): int
     {
         return match ($this) {
-            self::OlimexOpenOcdJtag,
-            self::OlimexOpenOcdJtagTiny => self::OLIMEX_VENDOR_ID,
             default => FtdiVendorId::FTDI->value,
         };
     }
@@ -47,16 +28,8 @@ enum MpsseSupportedDevice
     public function productId(): int
     {
         return match ($this) {
-            self::FT2232 => FtdiProductId::FT2232->value,
-            self::FT4232 => FtdiProductId::FT4232->value,
+            self::FT2232HL_A, self::FT2232HL_B => FtdiProductId::FT2232HL->value,
             self::FT232H => FtdiProductId::FT232H->value,
-            self::BusBlasterV2ChannelA => FtdiProductId::BusBlasterV2ChannelA->value,
-            self::BusBlasterV2ChannelB => FtdiProductId::BusBlasterV2ChannelB->value,
-            self::TurtelizerJtagRs232AdapterA => FtdiProductId::TurtelizerJtagRs232AdapterA->value,
-            self::AmontecJtagKey => FtdiProductId::AmontecJtagKey->value,
-            self::TiaoMultiProtocolAdapter => FtdiProductId::TiaoMultiProtocolAdapter->value,
-            self::OlimexOpenOcdJtag => 0x0003,
-            self::OlimexOpenOcdJtagTiny => 0x0004,
         };
     }
 
@@ -70,14 +43,8 @@ enum MpsseSupportedDevice
     public function ftdiProduct(): ?FtdiProductId
     {
         return match ($this) {
-            self::FT2232 => FtdiProductId::FT2232,
-            self::FT4232 => FtdiProductId::FT4232,
+            self::FT2232HL_A, self::FT2232HL_B  => FtdiProductId::FT2232HL,
             self::FT232H => FtdiProductId::FT232H,
-            self::BusBlasterV2ChannelA => FtdiProductId::BusBlasterV2ChannelA,
-            self::BusBlasterV2ChannelB => FtdiProductId::BusBlasterV2ChannelB,
-            self::TurtelizerJtagRs232AdapterA => FtdiProductId::TurtelizerJtagRs232AdapterA,
-            self::AmontecJtagKey => FtdiProductId::AmontecJtagKey,
-            self::TiaoMultiProtocolAdapter => FtdiProductId::TiaoMultiProtocolAdapter,
             default => null,
         };
     }
@@ -85,16 +52,8 @@ enum MpsseSupportedDevice
     public function description(): string
     {
         return match ($this) {
-            self::FT2232 => 'FT2232 Future Technology Devices International, Ltd',
-            self::FT4232 => 'FT4232 Future Technology Devices International, Ltd',
-            self::FT232H => 'FT232H Future Technology Devices International, Ltd',
-            self::BusBlasterV2ChannelA => 'Bus Blaster v2 (channel A)',
-            self::BusBlasterV2ChannelB => 'Bus Blaster v2 (channel B)',
-            self::TurtelizerJtagRs232AdapterA => 'Turtelizer JTAG/RS232 Adapter A',
-            self::AmontecJtagKey => 'Amontec JTAGkey',
-            self::TiaoMultiProtocolAdapter => 'TIAO Multi Protocol Adapter',
-            self::OlimexOpenOcdJtag => 'Olimex Ltd. OpenOCD JTAG',
-            self::OlimexOpenOcdJtagTiny => 'Olimex Ltd. OpenOCD JTAG TINY',
+            self::FT2232HL_A, self::FT2232HL_B => 'FT2232 Future Technology Devices International, Ltd',
+            self::FT232H => 'FT232H Future Technology Devices International, Ltd'
         };
     }
 
@@ -126,5 +85,14 @@ enum MpsseSupportedDevice
         }
 
         return $rows;
+    }
+
+    public function interface(): MPSSEInterface
+    {
+        return match ($this) {
+            self::FT2232HL_A, self::FT232H => MPSSEInterface::IFACE_A,
+            self::FT2232HL_B => MPSSEInterface::IFACE_B,
+            default => MPSSEInterface::IFACE_ANY,
+        };
     }
 }

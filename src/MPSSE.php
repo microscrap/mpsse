@@ -6,10 +6,10 @@ use Ftdi\FTDI;
 use Microscrap\Bindings\MPSSE\Enums\MPSSEAck;
 use Microscrap\Bindings\MPSSE\Enums\MPSSECommand;
 use Microscrap\Bindings\MPSSE\Enums\MPSSEEndianness;
-use Microscrap\Bindings\MPSSE\Enums\MpsseSupportedDevice;
 use Microscrap\Bindings\MPSSE\Enums\MPSSEInterface;
 use Microscrap\Bindings\MPSSE\Enums\MPSSEMode;
 use Microscrap\Bindings\MPSSE\Enums\MPSSEPin;
+use Microscrap\Bindings\MPSSE\Enums\MpsseSupportedDevice;
 
 /**
  * Pure-PHP port of libmpsse ({@link https://github.com/devttys0/libmpsse}) on top of {@see FTDI}.
@@ -163,15 +163,15 @@ final class MPSSE
         //   0x20 = DO_READ   (clock data in  on TDO/DI)
         //   0x01 = WRITE_NEG (clock data out on falling edge)
         //   0x04 = READ_NEG  (clock data in  on falling edge)
-        $ctx->tx   = 0x10 | $endianness->value; // MPSSE_DO_WRITE | endianness
-        $ctx->rx   = 0x20 | $endianness->value; // MPSSE_DO_READ  | endianness
+        $ctx->tx = 0x10 | $endianness->value; // MPSSE_DO_WRITE | endianness
+        $ctx->rx = 0x20 | $endianness->value; // MPSSE_DO_READ  | endianness
         $ctx->txrx = 0x10 | 0x20 | $endianness->value;
 
         // SK/DO/CS and GPIO0–3 are outputs; DI is an input.  SK and CS idle high.
-        $ctx->tris   = 0xFB; // DEFAULT_TRIS = SK|DO|CS|GPIO0|GPIO1|GPIO2|GPIO3
-        $ctx->pidle  = 0x09; // DEFAULT_PORT = SK|CS
+        $ctx->tris = 0xFB; // DEFAULT_TRIS = SK|DO|CS|GPIO0|GPIO1|GPIO2|GPIO3
+        $ctx->pidle = 0x09; // DEFAULT_PORT = SK|CS
         $ctx->pstart = 0x09;
-        $ctx->pstop  = 0x09;
+        $ctx->pstop = 0x09;
         $ctx->pstart &= ~MPSSEPin::CS->value;
 
         self::setLoopback($ctx, false);
@@ -182,47 +182,47 @@ final class MPSSE
 
         switch ($ctx->mode) {
             case MPSSEMode::SPI0->value:
-                $ctx->pidle  &= ~MPSSEPin::SK->value;
+                $ctx->pidle &= ~MPSSEPin::SK->value;
                 $ctx->pstart &= ~MPSSEPin::SK->value;
-                $ctx->pstop  &= ~MPSSEPin::SK->value;
-                $ctx->tx    |= 0x01;  // WRITE_NEG — propagate data on falling edge
-                $ctx->rx    &= ~0x04; // ~READ_NEG  — sample on rising edge
-                $ctx->txrx  |= 0x01;
-                $ctx->txrx  &= ~0x04;
+                $ctx->pstop &= ~MPSSEPin::SK->value;
+                $ctx->tx |= 0x01;  // WRITE_NEG — propagate data on falling edge
+                $ctx->rx &= ~0x04; // ~READ_NEG  — sample on rising edge
+                $ctx->txrx |= 0x01;
+                $ctx->txrx &= ~0x04;
                 break;
             case MPSSEMode::SPI3->value:
-                $ctx->pidle  |= MPSSEPin::SK->value;
+                $ctx->pidle |= MPSSEPin::SK->value;
                 $ctx->pstart |= MPSSEPin::SK->value;
-                $ctx->pstop  &= ~MPSSEPin::SK->value;
-                $ctx->tx    |= 0x01;
-                $ctx->rx    &= ~0x04;
-                $ctx->txrx  |= 0x01;
-                $ctx->txrx  &= ~0x04;
+                $ctx->pstop &= ~MPSSEPin::SK->value;
+                $ctx->tx |= 0x01;
+                $ctx->rx &= ~0x04;
+                $ctx->txrx |= 0x01;
+                $ctx->txrx &= ~0x04;
                 break;
             case MPSSEMode::SPI1->value:
-                $ctx->pidle  &= ~MPSSEPin::SK->value;
+                $ctx->pidle &= ~MPSSEPin::SK->value;
                 $ctx->pstart &= ~MPSSEPin::SK->value;
-                $ctx->pstop  |= MPSSEPin::SK->value;
-                $ctx->rx    |= 0x04;  // READ_NEG
-                $ctx->tx    &= ~0x01; // ~WRITE_NEG
-                $ctx->txrx  |= 0x04;
-                $ctx->txrx  &= ~0x01;
+                $ctx->pstop |= MPSSEPin::SK->value;
+                $ctx->rx |= 0x04;  // READ_NEG
+                $ctx->tx &= ~0x01; // ~WRITE_NEG
+                $ctx->txrx |= 0x04;
+                $ctx->txrx &= ~0x01;
                 break;
             case MPSSEMode::SPI2->value:
-                $ctx->pidle  |= MPSSEPin::SK->value;
+                $ctx->pidle |= MPSSEPin::SK->value;
                 $ctx->pstart |= MPSSEPin::SK->value;
-                $ctx->pstop  |= MPSSEPin::SK->value;
-                $ctx->rx    |= 0x04;
-                $ctx->tx    &= ~0x01;
-                $ctx->txrx  |= 0x04;
-                $ctx->txrx  &= ~0x01;
+                $ctx->pstop |= MPSSEPin::SK->value;
+                $ctx->rx |= 0x04;
+                $ctx->tx &= ~0x01;
+                $ctx->txrx |= 0x04;
+                $ctx->txrx &= ~0x01;
                 break;
             case MPSSEMode::I2C->value:
                 $ctx->tx |= 0x01; // WRITE_NEG
                 $ctx->rx &= ~0x04;
-                $ctx->pidle  |= MPSSEPin::DO->value | MPSSEPin::DI->value;
+                $ctx->pidle |= MPSSEPin::DO->value | MPSSEPin::DI->value;
                 $ctx->pstart &= ~MPSSEPin::DO->value & ~MPSSEPin::DI->value;
-                $ctx->pstop  &= ~MPSSEPin::DO->value & ~MPSSEPin::DI->value;
+                $ctx->pstop &= ~MPSSEPin::DO->value & ~MPSSEPin::DI->value;
                 $setupCommands .= chr(MPSSECommand::ENABLE_3_PHASE_CLOCK->value);
                 break;
             case MPSSEMode::GPIO->value:
@@ -263,13 +263,13 @@ final class MPSSE
         }
         // 0x02 = MPSSE_BITMODE flag in the FTDI transfer command byte
         if ($tf) {
-            $ctx->tx    |= 0x02;
-            $ctx->rx    |= 0x02;
-            $ctx->txrx  |= 0x02;
+            $ctx->tx |= 0x02;
+            $ctx->rx |= 0x02;
+            $ctx->txrx |= 0x02;
         } else {
-            $ctx->tx    &= ~0x02;
-            $ctx->rx    &= ~0x02;
-            $ctx->txrx  &= ~0x02;
+            $ctx->tx &= ~0x02;
+            $ctx->rx &= ~0x02;
+            $ctx->txrx &= ~0x02;
         }
     }
 
@@ -343,12 +343,12 @@ final class MPSSE
             return;
         }
         if ($idle) {
-            $ctx->pidle  |= MPSSEPin::CS->value;
-            $ctx->pstop  |= MPSSEPin::CS->value;
+            $ctx->pidle |= MPSSEPin::CS->value;
+            $ctx->pstop |= MPSSEPin::CS->value;
             $ctx->pstart &= ~MPSSEPin::CS->value;
         } else {
-            $ctx->pidle  &= ~MPSSEPin::CS->value;
-            $ctx->pstop  &= ~MPSSEPin::CS->value;
+            $ctx->pidle &= ~MPSSEPin::CS->value;
+            $ctx->pstop &= ~MPSSEPin::CS->value;
             $ctx->pstart |= MPSSEPin::CS->value;
         }
     }
@@ -363,9 +363,9 @@ final class MPSSE
             return -1;
         }
 
-        $ctx->pidle  |= MPSSEPin::CS->value;
+        $ctx->pidle |= MPSSEPin::CS->value;
         $ctx->pstart |= MPSSEPin::CS->value;
-        $ctx->pstop  |= MPSSEPin::CS->value;
+        $ctx->pstop |= MPSSEPin::CS->value;
 
         return self::setBitsLow($ctx, $ctx->pidle);
     }
@@ -394,6 +394,7 @@ final class MPSSE
     {
         if (! self::isValidContext($ctx)) {
             $ctx->status = 1; // STOPPED
+
             return -1;
         }
 
@@ -410,7 +411,7 @@ final class MPSSE
         // SPI mode 3: clock idles high but must go low before data to avoid glitches
         if ($ctx->mode === MPSSEMode::SPI3->value) {
             $status |= self::setBitsLow($ctx, $ctx->pstart & ~MPSSEPin::SK->value);
-        // SPI mode 1: clock idles low but must go high before data to avoid glitches
+            // SPI mode 1: clock idles low but must go high before data to avoid glitches
         } elseif ($ctx->mode === MPSSEMode::SPI1->value) {
             $status |= self::setBitsLow($ctx, $ctx->pstart | MPSSEPin::SK->value);
         }
@@ -424,6 +425,7 @@ final class MPSSE
     {
         if (! self::isValidContext($ctx)) {
             $ctx->status = 1;
+
             return -1;
         }
 
@@ -456,7 +458,7 @@ final class MPSSE
         }
 
         $size = strlen($data);
-        $n    = 0;
+        $n = 0;
 
         while ($n < $size) {
             $txsize = min($size - $n, $ctx->xsize);
@@ -553,8 +555,8 @@ final class MPSSE
         }
 
         $size = strlen($data);
-        $buf  = str_repeat("\0", $size);
-        $n    = 0;
+        $buf = str_repeat("\0", $size);
+        $n = 0;
 
         while ($n < $size) {
             $rxsize = min($size - $n, 512); // SPI_TRANSFER_SIZE
@@ -730,7 +732,7 @@ final class MPSSE
         }
 
         $size = strlen($data);
-        $n    = 0;
+        $n = 0;
 
         while ($n < $size) {
             $txsize = min($size - $n, $ctx->xsize);
@@ -752,7 +754,7 @@ final class MPSSE
         }
 
         $out = '';
-        $n   = 0;
+        $n = 0;
 
         while ($n < $size) {
             $rxsize = min($size - $n, $ctx->xsize);
@@ -783,13 +785,13 @@ final class MPSSE
             return null;
         }
 
-        $size  = strlen($wdata);
+        $size = strlen($wdata);
         $rdata = str_repeat("\0", $size);
-        $n     = 0;
+        $n = 0;
 
         while ($n < $size) {
             $rxsize = min($size - $n, 512); // SPI_TRANSFER_SIZE
-            $block  = self::buildBlockBuffer($ctx, $ctx->txrx, substr($wdata, $n, $rxsize));
+            $block = self::buildBlockBuffer($ctx, $ctx->txrx, substr($wdata, $n, $rxsize));
             if ($block === null || self::rawWrite($ctx, $block) !== 0) {
                 return null;
             }
@@ -837,8 +839,8 @@ final class MPSSE
             return false;
         }
 
-        $acc     = '';
-        $n       = 0;
+        $acc = '';
+        $n = 0;
         $retries = 0;
 
         while ($n < $size) {
@@ -848,11 +850,12 @@ final class MPSSE
                     break;
                 }
                 usleep(500);
+
                 continue;
             }
             $retries = 0;
-            $acc    .= $chunk;
-            $n      += strlen($chunk);
+            $acc .= $chunk;
+            $n += strlen($chunk);
         }
 
         if ($ctx->flushAfterRead) {
@@ -874,11 +877,11 @@ final class MPSSE
         }
 
         $buf = str_repeat("\0", $size);
-        $n   = 0;
+        $n = 0;
 
         while ($n < $size) {
             $rxsize = min($size - $n, $ctx->xsize);
-            $cmd    = self::buildBlockBuffer($ctx, $ctx->rx, str_repeat("\0", $rxsize));
+            $cmd = self::buildBlockBuffer($ctx, $ctx->rx, str_repeat("\0", $rxsize));
             if ($cmd === null || self::rawWrite($ctx, $cmd) !== 0) {
                 break;
             }
@@ -915,7 +918,7 @@ final class MPSSE
         $numBlocks = intdiv($size, $xferSize) + ($size % $xferSize !== 0 ? 1 : 0);
 
         $buf = '';
-        $k   = 0; // offset into $data
+        $k = 0; // offset into $data
 
         for ($j = 0; $j < $numBlocks; $j++) {
             $dsize = min($size - $k, $xferSize);
@@ -937,7 +940,7 @@ final class MPSSE
 
             if ($cmd === $ctx->tx || $cmd === $ctx->txrx) {
                 $buf .= substr($data, $k, $dsize);
-                $k   += $dsize;
+                $k += $dsize;
             }
 
             if ($ctx->mode === MPSSEMode::I2C->value) {
@@ -1004,12 +1007,12 @@ final class MPSSE
             $pinBit = MPSSEPin::GPIO0->value << $pin;
             if ($direction === 1) {
                 $ctx->pstart |= $pinBit;
-                $ctx->pidle  |= $pinBit;
-                $ctx->pstop  |= $pinBit;
+                $ctx->pidle |= $pinBit;
+                $ctx->pstop |= $pinBit;
             } else {
                 $ctx->pstart &= ~$pinBit;
-                $ctx->pidle  &= ~$pinBit;
-                $ctx->pstop  &= ~$pinBit;
+                $ctx->pidle &= ~$pinBit;
+                $ctx->pstop &= ~$pinBit;
             }
 
             return self::setBitsLow($ctx, $ctx->pidle);
@@ -1059,7 +1062,7 @@ final class MPSSE
         }
 
         $rsize = $size - 1;
-        $buf   = chr($cmd).chr($rsize & 0xFF).chr(($rsize >> 8) & 0xFF);
+        $buf = chr($cmd).chr($rsize & 0xFF).chr(($rsize >> 8) & 0xFF);
 
         if ($cmd === $ctx->tx || $cmd === $ctx->txrx) {
             if (strlen($buf) + $size > (63 * 1024) + 3) { // SPI_RW_SIZE + CMD_SIZE

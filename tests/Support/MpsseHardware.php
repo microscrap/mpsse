@@ -9,6 +9,7 @@ use Microscrap\Bindings\MPSSE\Enums\MPSSEMode;
 use Microscrap\Bindings\MPSSE\Enums\MpsseSupportedDevice;
 use Microscrap\Bindings\MPSSE\MPSSE;
 use Microscrap\Bindings\MPSSE\MPSSEContext;
+use PHPUnit\Framework\SkippedWithMessageException;
 
 final class MpsseHardware
 {
@@ -26,7 +27,7 @@ final class MpsseHardware
         );
 
         if (! $context->open) {
-            throw new \PHPUnit\Framework\SkippedWithMessageException(
+            throw new SkippedWithMessageException(
                 'FT232H not detected: '.MPSSE::errorString($context),
             );
         }
