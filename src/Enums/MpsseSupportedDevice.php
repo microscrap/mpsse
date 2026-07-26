@@ -13,10 +13,14 @@ use Microscrap\Bindings\MPSSE\MPSSE;
  */
 enum MpsseSupportedDevice: string
 {
-    case FT2232HL_A = 'ft2232hl-a';
-    case FT2232HL_B = 'ft2232hl-b';
-
     case FT232H = 'ft232h';
+    case FT2232H_A = 'ft2232hl-a';
+    case FT2232H_B = 'ft2232hl-b';
+    case FT4232H_A = 'ft4232hl-a';
+    case FT4232H_B = 'ft4232hl-b';
+    case FT4232H_C = 'ft4232hl-c';
+    case FT4232H_D = 'ft4232hl-d';
+
 
     public function vendorId(): int
     {
@@ -28,7 +32,8 @@ enum MpsseSupportedDevice: string
     public function productId(): int
     {
         return match ($this) {
-            self::FT2232HL_A, self::FT2232HL_B => FtdiProductId::FT2232HL->value,
+            self::FT2232H_A, self::FT2232H_B => FtdiProductId::FT2232HL->value,
+            self::FT4232H_A, self::FT4232H_B, self::FT4232H_C, self::FT4232H_D => FtdiProductId::FT4232H->value,
             self::FT232H => FtdiProductId::FT232H->value,
         };
     }
