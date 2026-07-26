@@ -32,7 +32,7 @@ enum MpsseSupportedDevice: string
     public function productId(): int
     {
         return match ($this) {
-            self::FT2232H_A, self::FT2232H_B => FtdiProductId::FT2232HL->value,
+            self::FT2232H_A, self::FT2232H_B => FtdiProductId::FT2232H->value,
             self::FT4232H_A, self::FT4232H_B, self::FT4232H_C, self::FT4232H_D => FtdiProductId::FT4232H->value,
             self::FT232H => FtdiProductId::FT232H->value,
         };
@@ -48,7 +48,7 @@ enum MpsseSupportedDevice: string
     public function ftdiProduct(): ?FtdiProductId
     {
         return match ($this) {
-            self::FT2232HL_A, self::FT2232HL_B  => FtdiProductId::FT2232HL,
+            self::FT2232H_A, self::FT2232H_B  => FtdiProductId::FT2232H,
             self::FT232H => FtdiProductId::FT232H,
             default => null,
         };
@@ -57,7 +57,8 @@ enum MpsseSupportedDevice: string
     public function description(): string
     {
         return match ($this) {
-            self::FT2232HL_A, self::FT2232HL_B => 'FT2232 Future Technology Devices International, Ltd',
+            self::FT4232H_A, self::FT4232H_B, self::FT4232H_C, self::FT4232H_D => 'FT4232 Future Technology Devices International, Ltd',
+            self::FT2232H_A, self::FT2232H_B => 'FT2232 Future Technology Devices International, Ltd',
             self::FT232H => 'FT232H Future Technology Devices International, Ltd'
         };
     }
@@ -95,8 +96,11 @@ enum MpsseSupportedDevice: string
     public function interface(): MPSSEInterface
     {
         return match ($this) {
-            self::FT2232HL_A, self::FT232H => MPSSEInterface::IFACE_A,
-            self::FT2232HL_B => MPSSEInterface::IFACE_B,
+            self::FT4232H_A, self::FT2232H_A, self::FT232H => MPSSEInterface::IFACE_A,
+            self::FT4232H_B, self::FT2232H_B => MPSSEInterface::IFACE_B,
+            self::FT4232H_C => MPSSEInterface::IFACE_C,
+            self::FT4232H_D => MPSSEInterface::IFACE_D,
+
             default => MPSSEInterface::IFACE_ANY,
         };
     }
