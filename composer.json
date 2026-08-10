@@ -1,9 +1,22 @@
 {
     "name": "microscrap/mpsse",
-    "description": "The MPSSE package that extends the FTDI Package",
+    "description": "MPSSE SPI/I2C/GPIO helpers extending the FTDI package",
+    "type": "library",
+    "version": "0.7.0",
+    "keywords": [
+        "framework",
+        "scrapyard-io",
+        "mpsse",
+        "ftdi",
+        "bindings"
+    ],
     "license": "MIT",
-    "homepage": "https://scrapyard-io.projectsaturnstudios.com",
-    "version": "0.5.4",
+    "homepage": "https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.7.x/overview",
+    "support": {
+        "docs": "https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.7.x/overview",
+        "source": "https://github.com/microscrap/mpsse",
+        "issues": "https://github.com/microscrap/mpsse/issues"
+    },
     "authors": [
         {
             "name": "Angel Gonzalez",
@@ -11,9 +24,12 @@
         }
     ],
     "require": {
-        "php": "^8.3",
-        "ext-ftdi": "^0.4.3|^0.5.0",
-        "microscrap/ftdi": "^0.5.0"
+        "php": "^8.4|^8.5|^8.6",
+        "ext-ftdi": "^0.7.0",
+        "microscrap/ftdi": "^0.7.0"
+    },
+    "suggest": {
+        "scrapyard-io/gpio-framework": "^0.7 — higher-level FTDI UART / USB / MPSSE adapters"
     },
     "require-dev": {
         "pestphp/pest": "^4"
@@ -37,5 +53,13 @@
             "pestphp/pest-plugin": true
         }
     },
-    "minimum-stability": "dev"
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.7.x-dev",
+            "dev-main": "0.7.x-dev",
+            "dev-0.7.x": "0.7.x-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

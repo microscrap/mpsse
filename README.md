@@ -1,24 +1,36 @@
-# microscrap/mpsse - MPSSE helper + static API for ScrapyardIO
+# microscrap/mpsse — MPSSE helpers for FTDI
 
-[![Coverage](https://img.shields.io/badge/coverage-75.0%25-yellow)](#testing-pest-v4)
+> **Docs (production):** [ScrapyardIO · microscrap/mpsse 0.7.x](https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.7.x/overview)
 
-PHP library that provides MPSSE-oriented SPI/I2C/GPIO operations on top of [`microscrap/ftdi`](https://github.com/microscrap/ftdi) and the [`ext-ftdi`](https://github.com/php-io-extensions/ftdi) extension.
+[![Docs](https://img.shields.io/badge/docs-ScrapyardIO-0ea5e9?logo=readthedocs&logoColor=white)](https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.7.x/overview)
+[![Packagist Version](https://img.shields.io/packagist/v/microscrap/mpsse.svg?label=packagist)](https://packagist.org/packages/microscrap/mpsse)
+[![PHP Version Require](https://img.shields.io/packagist/php-v/microscrap/mpsse.svg)](https://packagist.org/packages/microscrap/mpsse)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Requires ext-ftdi](https://img.shields.io/badge/ext--ftdi-%5E0.7-777bb4?logo=php&logoColor=white)](https://github.com/php-io-extensions/ftdi)
 
-This package includes:
+PHP library that provides MPSSE-oriented SPI / I²C / GPIO operations on top of [`microscrap/ftdi`](https://github.com/microscrap/ftdi) and the [`ext-ftdi`](https://github.com/php-io-extensions/ftdi) extension. Pure-PHP port of [libmpsse](https://github.com/devttys0/libmpsse) patterns via `Microscrap\Bindings\MPSSE\MPSSE`.
 
-* Global helper functions (`mpsse_open`, `mpsse_close`)
-* A full static-object API via `Microscrap\Bindings\MPSSE\MPSSE`
-* Typed enums for modes, pins, commands, interfaces, endianness, and common clock rates
+This is the **bindings** package — not the native extension. Ecosystem docs: [`0.7.x`](https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.7.x/overview).
+
+## Highlights
+
+* Global helper functions (`mpsse_open`, `mpsse_close`, pin helpers, …)
+* Full static API via `Microscrap\Bindings\MPSSE\MPSSE`
+* Typed enums for modes, pins, commands, interfaces, endianness, clock rates, and supported devices (**FULLY UPPERCASE** cases)
+* Built on `ext-ftdi` `^0.7.0` + `microscrap/ftdi` `^0.7.0`
 
 ## Requirements
 
-* PHP 8.3+
-* `ext-ftdi` ^0.4.0
-* `microscrap/ftdi` ^0.4.0
+* PHP `^8.4|^8.5|^8.6`
+* **ext-ftdi** `^0.7.0` — [php-io-extensions/ftdi](https://github.com/php-io-extensions/ftdi)
+* **microscrap/ftdi** `^0.7.0`
+* Runtime dependency of ext-ftdi:
+  * Debian/Ubuntu/Raspberry Pi OS: `libftdi1-2` (dev package for builds: `libftdi1-dev`)
+  * macOS: `brew install libftdi`
 
 ## Installation
 
-Confirm `ext-ftdi` is loaded:
+Confirm **ext-ftdi** is loaded:
 
 ```bash
 php -m | grep ftdi
@@ -27,10 +39,18 @@ php -m | grep ftdi
 Install package:
 
 ```bash
-composer require microscrap/mpsse
+composer require microscrap/mpsse:^0.7.0
 ```
 
-Composer autoloads `src/Helpers/mpsse.php`, which registers global helpers.
+Composer autoloads `src/Helpers/mpsse.php`, registering global helpers when the name is free (`function_exists` guard).
+
+Suggested peer:
+
+```bash
+composer require scrapyard-io/gpio-framework:^0.7 # higher adapters
+```
+
+There is **no** ServiceProvider / Chassis discovery in this package — bindings only.
 
 ## Usage
 
@@ -53,14 +73,14 @@ $ctx = mpsse_open(
     MPSSEInterface::IFACE_A
 );
 
-if ($ctx === null) {
+if (is_null($ctx)) {
     throw new RuntimeException('Unable to open MPSSE device');
 }
 
 mpsse_close($ctx);
 ```
 
-### Static object API style
+### Static API style
 
 ```php
 <?php
@@ -94,13 +114,27 @@ MPSSE::close($ctx);
 
 ## Global Helper API
 
+Helpers are defined only when the name is free (`function_exists` guard).
+
 ### `mpsse_open(...): ?Microscrap\Bindings\MPSSE\MPSSEContext`
 
-Wrapper for `MPSSE::open(...)`. Returns `null` if the underlying context did not open.
+Wrapper for `MPSSE::open(...)`. Returns `null` if the underlying context did not open. Optional `string &$error` receives `MPSSE::errorString(...)` on failure.
 
 ### `mpsse_close(Microscrap\Bindings\MPSSE\MPSSEContext $context): void`
 
 Wrapper for `MPSSE::close(...)`.
+
+### `mpsse_check_ftdi_device(string $device): bool`
+
+Returns whether `$device` matches a `FtdiProductId` case name.
+
+### `mpsse_configure_pin_direction(MPSSEContext $ctx, int $pin, bool $asOutput): int`
+
+Wrapper for `MPSSE::configurePinDirection(...)`.
+
+### `mpsse_pin_high` / `mpsse_pin_low` / `mpsse_pin_state` / `mpsse_read_pins`
+
+Thin wrappers for the matching `MPSSE::` pin helpers.
 
 ---
 
@@ -183,6 +217,8 @@ This package ships typed enums in `Microscrap\Bindings\MPSSE\Enums`:
 * `MPSSEGpioPin`
 * `MpsseSupportedDevice`
 
+Cases are **FULLY UPPERCASE**. No class-level constants.
+
 ---
 
 ## Testing (Pest v4)
@@ -199,25 +235,14 @@ Run with coverage:
 XDEBUG_MODE=coverage ./vendor/bin/pest --coverage
 ```
 
-Implemented feature coverage includes:
+Feature coverage includes:
 
 * `ext-ftdi` installation check (`extension_loaded('ftdi')` + semantic version format check)
 * No-hardware fallback paths: invalid VID/PID open failure and closed-context guard behavior
-* FT232H hardware workflows (open -> configure -> start -> transfer -> stop -> close)
+* FT232H hardware workflows (open → configure → start → transfer → stop → close)
 * SPI loopback, GPIO pin control, bitbang, and I2C session/ACK flows in required call order
-* Wrong-workflow assertions on mode mismatches (SPI transfer in I2C session, bitbang controls in SPI session)
+* Wrong-workflow assertions on mode mismatches
 * Helper workflow path: `mpsse_open(...)` / `mpsse_close(...)` on real hardware
-* Latest measured total line coverage with FT232H attached: `75.0%`
-
-## Code Completion Scan Results
-
-Source scan summary (from current code):
-
-* `src/MPSSE.php`: `41` public static methods
-* `src/Helpers/mpsse.php`: `2` global helper functions
-* `src/Enums`: `9` enum types
-
-README API sections are aligned to the current scanned symbols.
 
 ## License
 
