@@ -4,7 +4,7 @@
 
 ## Role
 
-Bindings-only Composer package: pure-PHP MPSSE SPI/I2C/GPIO helpers (libmpsse-style) over **ext-ftdi** + `microscrap/ftdi` (`^0.7.0`). Global helpers + `MPSSE` static wrapper + package-owned `MPSSEContext` + enums. No ServiceProvider, no Chassis/Core/Fabricate wiring.
+Bindings-only Composer package: pure-PHP MPSSE SPI/I2C/GPIO helpers (libmpsse-style) over **ext-ftdi** + `microscrap/ftdi` (`^0.8.0`). Global helpers + `MPSSE` static wrapper + package-owned `MPSSEContext` + enums. No ServiceProvider, no Chassis/Core/Fabricate wiring.
 
 ## Rules
 
