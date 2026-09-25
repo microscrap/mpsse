@@ -36,12 +36,12 @@ This package only wraps MPSSE on top of FTDI — it does not install udev rules 
 - Confirm **ext-ftdi**, host libftdi, and `microscrap/ftdi` are installed (see README OS packages).[^readme]
 - On Linux: ensure the device is available to libusb/libftdi (unbind `ftdi_sio` / appropriate udev rules for `0x0403` products as needed).
 - Check `$ctx->open` and `MPSSE::errorString($ctx)` after open attempts; `mpsse_open` returns `null` when open fails.[^helpers]
-- Higher-level adapters may live in `scrapyard-io/gpio-framework` — still expect host USB setup to be correct.
+- Higher-level adapters may live in `scrapyard-io/framework` — still expect host USB setup to be correct.
 
 # Related
 
 * [Helpers → MPSSE → FTDI](../architecture/helpers-mpsse-ftdi.md)
-* [Package (0.7)](../orientation/package.md)
+* [Package (0.9)](../orientation/package.md)
 
 [^readme]: Requirements and open usage
 [^mpsse]: Open path uses FTDI / ftdi_* under the hood

@@ -4,7 +4,7 @@
 
 ## Role
 
-Bindings-only Composer package: pure-PHP MPSSE SPI/I2C/GPIO helpers (libmpsse-style) over **ext-ftdi** + `microscrap/ftdi` (`^0.8.0`). Global helpers + `MPSSE` static wrapper + package-owned `MPSSEContext` + enums. No ServiceProvider, no Chassis/Core/Fabricate wiring.
+Bindings-only Composer package: pure-PHP MPSSE SPI/I2C/GPIO helpers (libmpsse-style) over **ext-ftdi** + `microscrap/ftdi` (`^0.9.0`). Global helpers + `MPSSE` static wrapper + package-owned `MPSSEContext` + enums. No ServiceProvider, no Chassis/Core/Fabricate wiring.
 
 ## Rules
 
@@ -15,7 +15,7 @@ Bindings-only Composer package: pure-PHP MPSSE SPI/I2C/GPIO helpers (libmpsse-st
 * Prefer `is_null($var)` over `$var === null`.
 * No class-level constants; no ServiceProvider / Chassis discovery in this package.
 * Do not invent a CoverageDrift suite unless explicitly requested.
-* Suggested peer only: `scrapyard-io/gpio-framework` — do not pull chip-driver / gpio-framework internals into this package.
+* Suggested peer only: `scrapyard-io/framework` — do not pull chip-driver / gpio-framework internals into this package.
 
 ## Quick OKF map
 

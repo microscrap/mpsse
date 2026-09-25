@@ -1,10 +1,10 @@
 ---
 type: Reference
 title: Ecosystem docs
-description: "Published ScrapyardIO ecosystem docs for microscrap/mpsse 0.7.x."
+description: "Published ScrapyardIO ecosystem docs linked from microscrap/mpsse 0.9."
 resource: "https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.7.x/overview"
-tags: [orientation, docs, ecosystem, 0.7]
-generated: { by: "okf-documentation-generator/cursor", at: "2026-08-10T21:28:00Z" }
+tags: [orientation, docs, ecosystem, 0.9]
+generated: { by: "cursor-grok-4.6", at: "2026-09-23T23:30:00Z" }
 status: draft
 sources:
   - id: composer-homepage
@@ -34,7 +34,7 @@ Human-facing package docs live on the ScrapyardIO ecosystem site:[^overview]
 
 # Related
 
-* [Package (0.7)](package.md)
+* [Package (0.9)](package.md)
 
 [^composer-homepage]: composer.json homepage / support.docs fields
 [^overview]: Ecosystem overview page

@@ -62,4 +62,7 @@ class MPSSEContext
      * Initialised to all-output to match the ftdi_set_bitmode(0xFF, 1) call in openIndex().
      */
     public int $bitbangDirection = 0xFF;
+
+    /** Set only inside MPSSE::record(): USB writes are captured here and reads answered with zeros. */
+    public ?MPSSERecording $recording = null;
 }

@@ -1,3 +1,6 @@
+## 2026-09-23
+* **Update**: 0.9.0 line over ext-ftdi 0.9.0 and microscrap/ftdi 0.9.0. Manifest, README, AGENTS and concept versions only; no code change. `MPSSE::version()` still reports libmpsse 1.3 — that is the ported C library's version, not this package's.
+
 ## 2026-09-14
 * **Update**: relabeled 0.7.0 → 0.8.0 with `ext-posi` / `ext-ftdi` 0.8.0. No code change.
 

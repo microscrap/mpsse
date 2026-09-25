@@ -57,16 +57,24 @@ final class MPSSE
         MPSSEInterface $iface = MPSSEInterface::IFACE_A,
         ?string $serial = null,
     ): MPSSEContext {
-        return self::open(
+        // description() is libmpsse's label, not the chip's USB product string (a stock FT232H reports
+        // "Single RS232-HS"): match on VID/PID like openSupported(), then label the context
+        $ctx = self::open(
             $device->vendorId(),
             $device->productId(),
             $mode,
             $freq,
             $endianness,
             $iface,
-            $device->description(),
+            '',
             $serial,
         );
+
+        if ($ctx->open) {
+            $ctx->description = $device->description();
+        }
+
+        return $ctx;
     }
 
     public static function openIndex(
@@ -390,6 +398,40 @@ final class MPSSE
         $ctx->flushAfterRead = $tf;
     }
 
+    /**
+     * Runs $body with every USB write captured and every USB read answered with zeros, so an I2C
+     * transaction records whole (each ACK reads as low). Context state moves exactly as it would live.
+     * Ends the stream with SEND_IMMEDIATE so the chip returns the last reply at once.
+     */
+    public static function record(MPSSEContext $ctx, \Closure $body): MPSSERecording
+    {
+        $ctx->recording = new MPSSERecording;
+
+        try {
+            $body();
+            $recording = $ctx->recording;       // the last segment, when $body cut() the recording
+        } finally {
+            $ctx->recording = null;
+        }
+
+        $recording->commands .= chr(MPSSECommand::SEND_IMMEDIATE->value);
+
+        return $recording;
+    }
+
+    /**
+     * Inside record(): ends the current segment (with SEND_IMMEDIATE) and hands it back; recording carries on in a
+     * fresh one. Lets a caller send what is recorded so far and see its ACKs before deciding what to record next.
+     */
+    public static function cut(MPSSEContext $ctx): MPSSERecording
+    {
+        $segment = $ctx->recording ?? throw new \LogicException('MPSSE::cut() outside MPSSE::record().');
+        $ctx->recording = new MPSSERecording;
+        $segment->commands .= chr(MPSSECommand::SEND_IMMEDIATE->value);
+
+        return $segment;
+    }
+
     public static function start(MPSSEContext $ctx): int
     {
         if (! self::isValidContext($ctx)) {
@@ -478,7 +520,7 @@ final class MPSSE
             $n += $txsize;
 
             if ($ctx->mode === MPSSEMode::I2C->value) {
-                $ack = self::rawRead($ctx, 1);
+                $ack = self::rawRead($ctx, 1, true);
                 if ($ack === false) {
                     return -1;
                 }
@@ -633,7 +675,25 @@ final class MPSSE
 
     public static function readPins(MPSSEContext $ctx): int
     {
-        return ($ctx->ftdi !== null) ? ftdi_read_pins($ctx->ftdi) : 0;
+        if ($ctx->ftdi === null) {
+            return -1;
+        }
+
+        if ($ctx->mode === MPSSEMode::BITBANG->value) {
+            return ftdi_read_pins($ctx->ftdi);
+        }
+
+        $query = chr(MPSSECommand::GET_BITS_LOW->value)
+            .chr(MPSSECommand::GET_BITS_HIGH->value)
+            .chr(MPSSECommand::SEND_IMMEDIATE->value);
+
+        if (self::rawWrite($ctx, $query) !== 0) {
+            return -1;
+        }
+
+        $levels = self::rawRead($ctx, 2);
+
+        return $levels === false ? -1 : ord($levels[0]) | (ord($levels[1]) << 8);
     }
 
     /**
@@ -819,6 +879,13 @@ final class MPSSE
         if (! $ctx->mode || $ctx->ftdi === null) {
             return -1;
         }
+
+        if (! is_null($ctx->recording)) {
+            $ctx->recording->commands .= $buf;
+
+            return 0;
+        }
+
         $size = strlen($buf);
 
         return ftdi_write_data($ctx->ftdi, $buf, $size) === $size ? 0 : -1;
@@ -833,10 +900,16 @@ final class MPSSE
      * single {@code ftdi_read_data} call often returns empty.  We retry up to ~10 ms
      * total (500 µs × 20) before giving up, which is sufficient for all MPSSE protocols.
      */
-    private static function rawRead(MPSSEContext $ctx, int $size): string|false
+    private static function rawRead(MPSSEContext $ctx, int $size, bool $ack = false): string|false
     {
         if (! $ctx->mode || $ctx->ftdi === null) {
             return false;
+        }
+
+        if (! is_null($ctx->recording)) {
+            $ctx->recording->expect($size, $ack);
+
+            return str_repeat("\0", $size);
         }
 
         $acc = '';

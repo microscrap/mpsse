@@ -53,7 +53,7 @@ Typed tokens for MPSSE modes, interfaces, endianness, clock rates, FTDI MPSSE co
 - No class-level constants in `src/`.[^agents]
 - Pass `->value` (or accept the enum at typed call sites) into APIs that take raw `int` / `string`.[^readme]
 
-# Enum inventory (0.7.0)
+# Enum inventory (0.9.0)
 
 | Enum | Backing | Cases (summary) |
 |------|---------|-----------------|
@@ -70,7 +70,7 @@ Typed tokens for MPSSE modes, interfaces, endianness, clock rates, FTDI MPSSE co
 # Related
 
 * [1:1 libmpsse wrap](one-to-one-libmpsse-wrap.md)
-* [Package (0.7)](../orientation/package.md)
+* [Package (0.9)](../orientation/package.md)
 * [Mode mismatch workflows](../traps/mode-mismatch-workflows.md)
 
 [^readme]: Enum namespaces and UPPERCASE note
