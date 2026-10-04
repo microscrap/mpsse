@@ -2,7 +2,6 @@
 
 namespace Microscrap\Bindings\MPSSE;
 
-use Ftdi\FTDI;
 use Microscrap\Bindings\MPSSE\Enums\MPSSEAck;
 use Microscrap\Bindings\MPSSE\Enums\MPSSECommand;
 use Microscrap\Bindings\MPSSE\Enums\MPSSEEndianness;
@@ -91,7 +90,10 @@ final class MPSSE
         $ctx = new MPSSEContext;
         self::flushAfterRead($ctx, false);
 
-        $ctx->ftdi = FTDI::ftdiNew();
+        $ctx->ftdi = ftdi_new();
+        if ($ctx->ftdi === null) {
+            return $ctx;
+        }
         ftdi_set_interface($ctx->ftdi, $iface->value);
 
         if (ftdi_usb_open_desc_index($ctx->ftdi, $vid, $pid, $description, $serial ?? '', $index) !== 0) {

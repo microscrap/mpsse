@@ -1,6 +1,6 @@
 <?php
 
-use Microscrap\Bindings\FTDI\Enums\FtdiProductId;
+use Ftdi\FtdiProductId;
 use Microscrap\Bindings\MPSSE\Enums\MPSSEEndianness;
 use Microscrap\Bindings\MPSSE\Enums\MPSSEInterface;
 use Microscrap\Bindings\MPSSE\Enums\MPSSEMode;

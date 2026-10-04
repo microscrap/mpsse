@@ -4,11 +4,11 @@
 
 ## Role
 
-Bindings-only Composer package: pure-PHP MPSSE SPI/I2C/GPIO helpers (libmpsse-style) over **ext-ftdi** + `microscrap/ftdi` (`^0.9.0`). Global helpers + `MPSSE` static wrapper + package-owned `MPSSEContext` + enums. No ServiceProvider, no Chassis/Core/Fabricate wiring.
+Bindings-only Composer package: pure-PHP MPSSE SPI/I2C/GPIO helpers (libmpsse-style) over **ext-ftdi** (`^0.10.0`, native `ftdi_*` functions; `microscrap/ftdi` no longer exists). Global helpers + `MPSSE` static wrapper + package-owned `MPSSEContext` + enums. No ServiceProvider, no Chassis/Core/Fabricate wiring.
 
 ## Rules
 
-* Helpers call `Microscrap\Bindings\MPSSE\MPSSE` static methods — there **is** an intermediate package wrapper (unlike `microscrap/ftdi`, which calls `Ftdi\FTDI` directly).
+* Helpers call `Microscrap\Bindings\MPSSE\MPSSE` static methods — there **is** an intermediate package wrapper over the extension's global `ftdi_*` functions (there is no `Ftdi\FTDI` class in 0.10).
 * Keep the wrap aligned with libmpsse / the existing `MPSSE` surface; do not invent APIs. Helpers stay thin over `MPSSE`.
 * Context type is package-owned `MPSSEContext` — do not invent parallel DataObjects beyond this.
 * Mode / pin / command / device tokens live in `src/Enums/*` as int- or string-backed enums with **FULLY UPPERCASE** cases.

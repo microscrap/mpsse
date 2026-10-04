@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Microscrap\Bindings\MPSSE\Enums;
 
-use Microscrap\Bindings\FTDI\Enums\FtdiProductId;
-use Microscrap\Bindings\FTDI\Enums\FtdiVendorId;
+use Ftdi\FtdiProductId;
+use Ftdi\FtdiVendorId;
 use Microscrap\Bindings\MPSSE\MPSSE;
 
 /**

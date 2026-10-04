@@ -1,7 +1,7 @@
 ---
 type: Architecture
 title: "Helpers → MPSSE → FTDI"
-description: "Global helpers call Microscrap\\Bindings\\MPSSE\\MPSSE; that wrapper uses Ftdi\\FTDI / ftdi_* — intermediate package class exists (unlike microscrap/ftdi)."
+description: "Global helpers call Microscrap\\Bindings\\MPSSE\\MPSSE; that wrapper calls ext-ftdi's global ftdi_* functions."
 resource: src/Helpers/mpsse.php
 tags: [architecture, bindings, mpsse, helpers, ftdi]
 generated: { by: "okf-documentation-generator/cursor", at: "2026-08-10T21:28:00Z" }
@@ -29,24 +29,24 @@ sources:
 
 # Call stack
 
-Unlike `microscrap/ftdi` (helpers → `Ftdi\FTDI` with **no** package wrapper), this package **does** have an intermediate static class:[^readme][^helpers][^mpsse]
+Helpers reach ext-ftdi through an intermediate static class:[^readme][^helpers][^mpsse]
 
 ```
 app / tests
     │
     └─ mpsse_open(...) / mpsse_pin_high(...)   # global helpers (thin)
             └─► Microscrap\Bindings\MPSSE\MPSSE::*
-                    └─► Ftdi\FTDI / ftdi_* helpers (ext-ftdi / libftdi1)
+                    └─► ftdi_* global functions (ext-ftdi / libftdi1)
 ```
 
 Rules:[^agents][^readme]
 
-1. Helpers call `MPSSE` static methods only (not `Ftdi\FTDI` directly).
+1. Helpers call `MPSSE` static methods only (not `ftdi_*` directly).
 2. Protocol / session logic lives on `MPSSE` — keep helpers thin.
-3. Context type is package-owned `MPSSEContext` (may hold `?FTDIContext`); do not invent parallel DataObjects beyond this.[^context]
-4. Do not remove the `MPSSE` wrapper to “match ftdi” unless Angel explicitly asks.
+3. Context type is package-owned `MPSSEContext` (may hold `?Ftdi\FTDIContext`); do not invent parallel DataObjects beyond this.[^context]
+4. Do not remove the `MPSSE` wrapper unless Angel explicitly asks.
 
-# Helper inventory (0.9.0)
+# Helper inventory (0.10.0)
 
 Eight globals in `src/Helpers/mpsse.php`:[^helpers]
 
@@ -54,7 +54,7 @@ Eight globals in `src/Helpers/mpsse.php`:[^helpers]
 |--------|----------------|
 | `mpsse_open(...)` | `MPSSE::open(...)` (returns `null` when not open) |
 | `mpsse_close($ctx)` | `MPSSE::close(...)` |
-| `mpsse_check_ftdi_device($device)` | Matches `FtdiProductId` case **name** |
+| `mpsse_check_ftdi_device($device)` | Matches `Ftdi\FtdiProductId` case **name** |
 | `mpsse_configure_pin_direction(...)` | `MPSSE::configurePinDirection(...)` |
 | `mpsse_pin_high` / `mpsse_pin_low` | `MPSSE::pinHigh` / `pinLow` |
 | `mpsse_pin_state` / `mpsse_read_pins` | `MPSSE::pinState` / `readPins` |
@@ -71,8 +71,9 @@ Each function is wrapped in `if (! function_exists(...))` so a prior definition 
 
 # Objects and errors
 
-- Session state is `Microscrap\Bindings\MPSSE\MPSSEContext` (libmpsse-style fields; embeds `?Ftdi\FTDIContext`).[^context]
+- Session state is `Microscrap\Bindings\MPSSE\MPSSEContext` (libmpsse-style fields; embeds `?Ftdi\FTDIContext`, which owns its C pointer; no int handle).[^context]
 - Prefer `is_null($ctx)` / `is_null($ctx->ftdi)` style checks over `=== null` in agent-authored code.[^agents]
+- `ftdi_new()` returns `?FTDIContext`; on `null` the `open*` methods return an unopened `MPSSEContext` with `ftdi === null`. `ftdi_read_data` returns `string|false`.[^mpsse]
 - Use `MPSSE::errorString($ctx)` after failed opens; helpers may populate optional `&$error`.[^helpers][^readme]
 - No ServiceProvider-thrown framework exceptions from this package.[^readme]
 

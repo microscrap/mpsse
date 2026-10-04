@@ -1,17 +1,16 @@
 <?php
 
-use Ftdi\FTDIContext;
 use Microscrap\Bindings\MPSSE\Enums\MPSSECommand;
 use Microscrap\Bindings\MPSSE\Enums\MPSSEMode;
 use Microscrap\Bindings\MPSSE\MPSSE;
 use Microscrap\Bindings\MPSSE\MPSSEContext;
 use Microscrap\Bindings\MPSSE\MPSSERecording;
 
-/** An I2C-mode context that never touches USB: recording answers every read itself. */
+/** An I2C-mode context that never touches USB: an unopened libftdi context, and recording answers every read itself. */
 function recordableI2CContext(): MPSSEContext
 {
     $ctx = new MPSSEContext;
-    $ctx->ftdi = new FTDIContext;
+    $ctx->ftdi = ftdi_new();
     $ctx->open = true;
     $ctx->mode = MPSSEMode::I2C->value;
     $ctx->status = 1;

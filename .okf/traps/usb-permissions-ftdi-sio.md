@@ -1,7 +1,7 @@
 ---
 type: Trap
 title: "USB permissions / ftdi_sio"
-description: "Linux ftdi_sio / missing udev rules commonly block MPSSE open even when ext-ftdi is loaded (same family as microscrap/ftdi)."
+description: "Linux ftdi_sio / missing udev rules commonly block MPSSE open even when ext-ftdi is loaded (ext-ftdi family issue)."
 resource: src/MPSSE.php
 tags: [trap, usb, linux, ftdi, mpsse, permissions]
 generated: { by: "okf-documentation-generator/cursor", at: "2026-08-10T21:28:00Z" }
@@ -18,7 +18,7 @@ sources:
     title: mpsse_open failure path and error string
   - id: composer
     resource: composer.json
-    title: Requires ext-ftdi and microscrap/ftdi
+    title: Requires ext-ftdi
 ---
 
 # Symptom
@@ -33,7 +33,7 @@ This package only wraps MPSSE on top of FTDI — it does not install udev rules 
 
 # Mitigation
 
-- Confirm **ext-ftdi**, host libftdi, and `microscrap/ftdi` are installed (see README OS packages).[^readme]
+- Confirm **ext-ftdi**, and host libftdi are installed (see README OS packages).[^readme]
 - On Linux: ensure the device is available to libusb/libftdi (unbind `ftdi_sio` / appropriate udev rules for `0x0403` products as needed).
 - Check `$ctx->open` and `MPSSE::errorString($ctx)` after open attempts; `mpsse_open` returns `null` when open fails.[^helpers]
 - Higher-level adapters may live in `scrapyard-io/framework` — still expect host USB setup to be correct.
@@ -41,9 +41,9 @@ This package only wraps MPSSE on top of FTDI — it does not install udev rules 
 # Related
 
 * [Helpers → MPSSE → FTDI](../architecture/helpers-mpsse-ftdi.md)
-* [Package (0.9)](../orientation/package.md)
+* [Package (0.10)](../orientation/package.md)
 
 [^readme]: Requirements and open usage
 [^mpsse]: Open path uses FTDI / ftdi_* under the hood
 [^helpers]: mpsse_open failure path and error string
-[^composer]: Requires ext-ftdi and microscrap/ftdi
+[^composer]: Requires ext-ftdi
