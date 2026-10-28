@@ -41,7 +41,7 @@ This package only wraps MPSSE on top of FTDI — it does not install udev rules 
 # Related
 
 * [Helpers → MPSSE → FTDI](../architecture/helpers-mpsse-ftdi.md)
-* [Package (0.10)](../orientation/package.md)
+* [Package (0.11)](../orientation/package.md)
 
 [^readme]: Requirements and open usage
 [^mpsse]: Open path uses FTDI / ftdi_* under the hood

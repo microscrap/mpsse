@@ -1,28 +1,28 @@
 # microscrap/mpsse — MPSSE helpers for FTDI
 
-> **Docs (production):** [ScrapyardIO · microscrap/mpsse 0.10.x](https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.10.x/overview)
+> **Docs (production):** [ScrapyardIO · microscrap/mpsse 0.11.x](https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.11.x/overview)
 
-[![Docs](https://img.shields.io/badge/docs-ScrapyardIO-0ea5e9?logo=readthedocs&logoColor=white)](https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.10.x/overview)
+[![Docs](https://img.shields.io/badge/docs-ScrapyardIO-0ea5e9?logo=readthedocs&logoColor=white)](https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.11.x/overview)
 [![Packagist Version](https://img.shields.io/packagist/v/microscrap/mpsse.svg?label=packagist)](https://packagist.org/packages/microscrap/mpsse)
 [![PHP Version Require](https://img.shields.io/packagist/php-v/microscrap/mpsse.svg)](https://packagist.org/packages/microscrap/mpsse)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Requires ext-ftdi](https://img.shields.io/badge/ext--ftdi-%5E0.10.0-777bb4?logo=php&logoColor=white)](https://github.com/php-io-extensions/ftdi)
+[![Requires ext-ftdi](https://img.shields.io/badge/ext--ftdi-%5E0.11.0-777bb4?logo=php&logoColor=white)](https://github.com/php-io-extensions/ftdi)
 
 PHP library that provides MPSSE-oriented SPI / I²C / GPIO operations on top of the [`ext-ftdi`](https://github.com/php-io-extensions/ftdi) extension (its native `ftdi_*` functions). Pure-PHP port of [libmpsse](https://github.com/devttys0/libmpsse) patterns via `Microscrap\Bindings\MPSSE\MPSSE`.
 
-This is the **bindings** package — not the native extension. Ecosystem docs: [`0.10.x`](https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.10.x/overview).
+This is the **bindings** package — not the native extension. Ecosystem docs: [`0.11.x`](https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.11.x/overview).
 
 ## Highlights
 
 * Global helper functions (`mpsse_open`, `mpsse_close`, pin helpers, …)
 * Full static API via `Microscrap\Bindings\MPSSE\MPSSE`
 * Typed enums for modes, pins, commands, interfaces, endianness, clock rates, and supported devices (**FULLY UPPERCASE** cases)
-* Built on `ext-ftdi` `^0.10.0` (the only dependency besides PHP)
+* Built on `ext-ftdi` `^0.11.0` (the only dependency besides PHP)
 
 ## Requirements
 
-* PHP `^8.4|^8.5|^8.6`
-* **ext-ftdi** `^0.10.0` — [php-io-extensions/ftdi](https://github.com/php-io-extensions/ftdi)
+* PHP `~8.4.27||^8.5.12`
+* **ext-ftdi** `^0.11.0` — [php-io-extensions/ftdi](https://github.com/php-io-extensions/ftdi)
 * Runtime dependency of ext-ftdi:
   * Debian/Ubuntu/Raspberry Pi OS: `libftdi1-2` (dev package for builds: `libftdi1-dev`)
   * macOS: `brew install libftdi`
@@ -38,7 +38,7 @@ php -m | grep ftdi
 Install package:
 
 ```bash
-composer require microscrap/mpsse:^0.10.0
+composer require microscrap/mpsse:^0.11.0
 ```
 
 Composer autoloads `src/Helpers/mpsse.php`, registering global helpers when the name is free (`function_exists` guard).
@@ -46,7 +46,7 @@ Composer autoloads `src/Helpers/mpsse.php`, registering global helpers when the 
 Suggested peer:
 
 ```bash
-composer require scrapyard-io/framework:^0.10.0 # higher adapters
+composer require scrapyard-io/framework:^0.11.0 # higher adapters
 ```
 
 There is **no** ServiceProvider / Chassis discovery in this package — bindings only.

@@ -1,9 +1,9 @@
 ---
 type: Reference
 title: Ecosystem docs
-description: "Published ScrapyardIO ecosystem docs linked from microscrap/mpsse 0.10."
-resource: "https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.10.x/overview"
-tags: [orientation, docs, ecosystem, 0.10]
+description: "Published ScrapyardIO ecosystem docs linked from microscrap/mpsse 0.11."
+resource: "https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.11.x/overview"
+tags: [orientation, docs, ecosystem, 0.11]
 generated: { by: "cursor-grok-4.6", at: "2026-09-23T23:30:00Z" }
 status: draft
 sources:
@@ -11,7 +11,7 @@ sources:
     resource: composer.json
     title: composer.json homepage / support.docs fields
   - id: overview
-    resource: "https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.10.x/overview"
+    resource: "https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.11.x/overview"
     title: Ecosystem overview page
   - id: readme
     resource: README.md
@@ -22,7 +22,7 @@ sources:
 
 Human-facing package docs live on the ScrapyardIO ecosystem site:[^overview]
 
-[https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.10.x/overview](https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.10.x/overview)
+[https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.11.x/overview](https://scrapyard-io.projectsaturnstudios.com/ecosystem/microscrap/mpsse/0.11.x/overview)
 
 `composer.json` `homepage` and `support.docs` point at that overview.[^composer-homepage][^readme]
 
@@ -34,7 +34,7 @@ Human-facing package docs live on the ScrapyardIO ecosystem site:[^overview]
 
 # Related
 
-* [Package (0.10)](package.md)
+* [Package (0.11)](package.md)
 
 [^composer-homepage]: composer.json homepage / support.docs fields
 [^overview]: Ecosystem overview page

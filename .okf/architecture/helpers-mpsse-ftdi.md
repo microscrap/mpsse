@@ -46,7 +46,7 @@ Rules:[^agents][^readme]
 3. Context type is package-owned `MPSSEContext` (may hold `?Ftdi\FTDIContext`); do not invent parallel DataObjects beyond this.[^context]
 4. Do not remove the `MPSSE` wrapper unless Angel explicitly asks.
 
-# Helper inventory (0.10.0)
+# Helper inventory (0.11.0)
 
 Eight globals in `src/Helpers/mpsse.php`:[^helpers]
 

@@ -1,9 +1,9 @@
 ---
 type: Orientation
-title: Package (0.10)
-description: "microscrap/mpsse 0.10.0 — bindings-only MPSSE SPI/I2C/GPIO helpers; helpers → MPSSE → FTDI; no ServiceProvider."
+title: Package (0.11)
+description: "microscrap/mpsse 0.11.0 — bindings-only MPSSE SPI/I2C/GPIO helpers; helpers → MPSSE → FTDI; no ServiceProvider."
 resource: .
-tags: [orientation, mpsse, microscrap, bindings, 0.10]
+tags: [orientation, mpsse, microscrap, bindings, 0.11]
 generated: { by: "cursor-grok-4.6", at: "2026-09-23T23:30:00Z" }
 status: draft
 sources:
@@ -26,16 +26,16 @@ sources:
 
 # What it is
 
-Composer package `microscrap/mpsse` at **0.10.0** — pure-PHP MPSSE SPI / I²C / GPIO helpers modeled on [libmpsse](https://github.com/devttys0/libmpsse), built on **ext-ftdi**'s native `ftdi_*` functions.[^composer][^readme]
+Composer package `microscrap/mpsse` at **0.11.0** — pure-PHP MPSSE SPI / I²C / GPIO helpers modeled on [libmpsse](https://github.com/devttys0/libmpsse), built on **ext-ftdi**'s native `ftdi_*` functions.[^composer][^readme]
 
 | Field | Value |
 |-------|-------|
 | Name | `microscrap/mpsse` |
-| Version | `0.10.0` |
-| PHP | `^8.4\|^8.5\|^8.6`[^composer] |
+| Version | `0.11.0` |
+| PHP | `~8.4.27\|\|^8.5.12`[^composer] |
 | Namespace | `Microscrap\Bindings\MPSSE\` → `src/`[^composer] |
-| Require | `ext-ftdi` `^0.10.0`[^composer] |
-| Suggest | `scrapyard-io/framework` `^0.10.0`[^composer] |
+| Require | `ext-ftdi` `^0.11.0`[^composer] |
+| Suggest | `scrapyard-io/framework` `^0.11.0`[^composer] |
 | Homepage | Ecosystem docs overview (see [Ecosystem docs](ecosystem-docs.md))[^composer] |
 | Discovery | **None** — no provider / Chassis registration in this package[^readme] |
 | Role | Bindings layer only (helpers + `MPSSE` wrapper + enums + `MPSSEContext`)[^helpers][^mpsse][^readme] |
@@ -45,7 +45,7 @@ Autoloads `src/Helpers/mpsse.php` global `mpsse_*` helpers, each guarded with `f
 # What it is not
 
 - Not the native **ext-ftdi** extension — that is `php-io-extensions/ftdi`.[^readme]
-- Not a wrapper over `microscrap/ftdi` — that package no longer exists; ext-ftdi 0.10 absorbed it, and its enums are `Ftdi\FtdiVendorId` / `Ftdi\FtdiProductId`.[^composer]
+- Not a wrapper over `microscrap/ftdi` — that package no longer exists; ext-ftdi 0.11 absorbed it, and its enums are `Ftdi\FtdiVendorId` / `Ftdi\FtdiProductId`.[^composer]
 - Not higher UART/USB/MPSSE adapters — those belong in `scrapyard-io/framework` (suggested peer).[^composer]
 - Not a ServiceProvider package — no Chassis/Core/Fabricate/Machine coupling.[^readme][^agents]
 
@@ -67,7 +67,7 @@ Autoloads `src/Helpers/mpsse.php` global `mpsse_*` helpers, each guarded with `f
 | Wrap rules | [1:1 libmpsse wrap](../conventions/one-to-one-libmpsse-wrap.md) |
 | Enums | [Enums for MPSSE](../conventions/enums-mpsse.md) |
 | Docs site | [Ecosystem docs](ecosystem-docs.md) |
-| Peers | `microscrap/gpio`, `i2c`, `spi`, `uart` 0.10.0 |
+| Peers | `microscrap/gpio`, `i2c`, `spi`, `uart` 0.11.0 |
 
 [^composer]: Package name, version, PHP, require, autoload helpers
 [^readme]: Package README

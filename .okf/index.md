@@ -4,7 +4,7 @@ okf_version: "0.2"
 
 # microscrap/mpsse Knowledge Bundle
 
-Package knowledge for `microscrap/mpsse` (bindings-only MPSSE SPI/I2C/GPIO helpers over **ext-ftdi** `ftdi_*`, v0.10.0).
+Package knowledge for `microscrap/mpsse` (bindings-only MPSSE SPI/I2C/GPIO helpers over **ext-ftdi** `ftdi_*`, v0.11.0).
 Read this index first; open only the concepts needed for the task.
 
 **Trust rule:** Prefer `status: stable`. Treat `deprecated` as historical only. New agent-written concepts stay `status: draft` until a human verifies them.
@@ -15,7 +15,7 @@ Read this index first; open only the concepts needed for the task.
 
 # Orientation
 
-* [Package (0.10)](orientation/package.md) - Composer identity, namespace, helpers over MPSSE / FTDI.
+* [Package (0.11)](orientation/package.md) - Composer identity, namespace, helpers over MPSSE / FTDI.
 * [Ecosystem docs](orientation/ecosystem-docs.md) - Published overview and docs site entrypoint.
 
 # Architecture

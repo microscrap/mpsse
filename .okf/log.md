@@ -1,3 +1,7 @@
+## 2026-10-28
+
+* **Version**: 0.11.0 with the Venusian 0.11 ecosystem: `version` 0.11.0, `dev-main` → `0.11.x-dev`, `ext-ftdi` `^0.11.0`, PHP `~8.4.27||^8.5.12`, docs URLs `0.11.x`, `scrapyard-io/framework` `^0.11.0`. README, AGENTS and the bundle relabelled; CI installs `ftdi` `^0.11` where it has a workflow. No API change. 14 passed, 16 skipped (no FT232H attached) on Homebrew PHP 8.4 NTS and ZTS and on the Pi (8.4 ZTS).
+
 ## 2026-10-03
 * **Update**: 0.10.0 port over ext-ftdi 0.10.0, a C rewrite that absorbs `microscrap/ftdi`. `Ftdi\FTDI` is gone; `MPSSE` calls the extension's global `ftdi_*` functions, and `Ftdi\FtdiVendorId` / `Ftdi\FtdiProductId` replace the `Microscrap\Bindings\FTDI\Enums` pair. `ftdi_new()` returns `?FTDIContext`; on `null`, `open*` returns an unopened `MPSSEContext`. Requires only `php` and `ext-ftdi` `^0.10.0`; docs URLs now `0.10.x`. Pest suite (30 tests, FT232H hardware feature tests included) passes on macOS NTS and ZTS; a LIS3DH answers WHO_AM_I 0x33 at 0x18 over FT232H MPSSE I2C.
 
